@@ -80,7 +80,7 @@ class BottomNav extends StatelessWidget {
         ),
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard_outlined, size: 26),
+            icon: const Icon(Icons.dashboard_outlined, size: 26),
             activeIcon: GradientIcon(
               icon: Icons.dashboard_rounded,
               size: 28,
@@ -89,7 +89,7 @@ class BottomNav extends StatelessWidget {
             label: 'Dashboard',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business_center_outlined, size: 26),
+            icon: const Icon(Icons.business_rounded, size: 26),
             activeIcon: GradientIcon(
               icon: Icons.business_rounded,
               size: 28,

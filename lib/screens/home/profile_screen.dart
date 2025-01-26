@@ -28,7 +28,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _handleRefresh() async {
-    await Provider.of<AuthProvider>(context, listen: false).fetchUserDetails();
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    await authProvider.fetchUserDetails(forceRefresh: true);
   }
 
   @override

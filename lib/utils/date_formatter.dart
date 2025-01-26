@@ -1,12 +1,14 @@
 // lib/utils/date_formatter.dart
+
 class DateFormatter {
   static String format(String dateString) {
     try {
+      // Handle both formats: with timestamp (2025-01-24T06:39:29.617+00:00) and without (2025-01-18)
       final dateTime = DateTime.parse(dateString);
       final day = dateTime.day;
       final month = _getMonthName(dateTime.month);
       final year = dateTime.year;
-      return '${day}${_getOrdinalSuffix(day)} $month, $year';
+      return '$day${_getOrdinalSuffix(day)} $month, $year';
     } catch (e) {
       return 'Invalid Date';
     }

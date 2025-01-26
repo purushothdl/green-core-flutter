@@ -13,7 +13,8 @@ class AuthProvider with ChangeNotifier {
   User? get user => _user;
   bool get isUserLoaded => _isUserLoaded;
 
-  Future<void> fetchUserDetails() async {
+  Future<void> fetchUserDetails({bool forceRefresh = false}) async {
+    if (_isUserLoaded && !forceRefresh) return;
     _isLoading = true;
     _isUserLoaded = true;
     notifyListeners();
@@ -26,6 +27,11 @@ class AuthProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> refreshUserDetails() async {
+    _isUserLoaded = false;
+    await fetchUserDetails();
   }
 
   Future<void> registerUser(User user) async {
