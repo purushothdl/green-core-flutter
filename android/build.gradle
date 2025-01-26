@@ -1,3 +1,19 @@
+// Add the buildscript block first
+buildscript {
+    ext.kotlin_version = '1.9.0' // Define your Kotlin version here
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Gradle plugin for Android
+        classpath 'com.android.tools.build:gradle:7.3.1' // Use the correct version here
+        // Kotlin plugin
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // Google Services plugin (for Firebase)
+    }
+}
+
 allprojects {
     repositories {
         google()

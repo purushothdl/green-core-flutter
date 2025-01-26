@@ -38,19 +38,20 @@ class WasteProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchWasteGraph({bool forceRefresh = false}) async {
-    if (_graphData.isNotEmpty && !forceRefresh) return; // Skip if already loaded and not forcing refresh
+Future<void> fetchWasteGraph({bool forceRefresh = false}) async {
+  if (_graphData.isNotEmpty && !forceRefresh) return; // Skip if already loaded and not forcing refresh
 
-    _isGraphLoading = true;
+  _isGraphLoading = true;
+  notifyListeners();
+
+  try {
+    _graphData = await WasteService.fetchWasteGraph();
+    print('Fetched Graph Data: $_graphData'); // Log the fetched data
+  } catch (e) {
+    throw Exception('Failed to fetch waste graph: $e');
+  } finally {
+    _isGraphLoading = false;
     notifyListeners();
-
-    try {
-      _graphData = await WasteService.fetchWasteGraph();
-    } catch (e) {
-      throw Exception('Failed to fetch waste graph: $e');
-    } finally {
-      _isGraphLoading = false;
-      notifyListeners();
-    }
   }
+}
 }

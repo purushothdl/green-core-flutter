@@ -13,6 +13,12 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.green,
       foregroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(18), // Rounded bottom-left corner
+          bottomRight: Radius.circular(18), // Rounded bottom-right corner
+        ),
+      ),
       title: Row(
         children: [
           // Profile Picture
@@ -40,7 +46,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               Text(
-                user?.name ?? 'Loading...',
+                StringUtils.capitalizeFirstLetters(user?.name) ?? 'Loading...',
                 style: const TextStyle(
                   fontSize: 14,
                 ),

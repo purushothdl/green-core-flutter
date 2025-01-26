@@ -18,9 +18,15 @@ String getGreeting() {
 
 
 class StringUtils {
-  static String capitalizeFirstLetters(String input) {
+  static String? capitalizeFirstLetters(String? input) {
+    // Return null if input is null
+    if (input == null) {
+      return null;
+    }
+
+    // Return empty string if input is empty
     if (input.isEmpty) {
-      return input; // Return empty string if input is empty
+      return input;
     }
 
     // Split the string into words
@@ -32,8 +38,6 @@ class StringUtils {
         words[i] = words[i][0].toUpperCase() + words[i].substring(1).toLowerCase();
       }
     }
-
-    // Join the words back into a single string
     return words.join(' ');
   }
 }

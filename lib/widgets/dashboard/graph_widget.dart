@@ -1,6 +1,6 @@
 // lib/widgets/dashboard/graph_widget.dart
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../utils/date_formatter.dart';
 
 class GraphWidget extends StatefulWidget {
@@ -21,10 +21,11 @@ class _GraphWidgetState extends State<GraphWidget> {
       return Container(
         height: 230,
         width: double.infinity,
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: const DecorationImage(
-            image: AssetImage('assets/dashboard/waste_card_bg.jpg'),
+            image: AssetImage('assets/dashboard/image.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -42,7 +43,7 @@ class _GraphWidgetState extends State<GraphWidget> {
     }
 
     final weeks = widget.graphData.map((data) => data['week'] as String).toList();
-    final wasteData = widget.graphData.map((data) => data['waste_data'] as Map<String, double>).toList();
+    final totalWeights = widget.graphData.map((data) => data['total_weight'] as double).toList();
 
     return GestureDetector(
       onHorizontalDragUpdate: (details) {
@@ -60,79 +61,55 @@ class _GraphWidgetState extends State<GraphWidget> {
         });
       },
       child: Container(
-        height: 200,
+        height: 230,
         width: double.infinity,
+        margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: const DecorationImage(
-            image: AssetImage('assets/dashboard/waste_card_bg.jpg'),
+            image: AssetImage('assets/dashboard/image.png'),
             fit: BoxFit.cover,
           ),
         ),
         child: Stack(
           children: [
-            LineChart(
-              LineChartData(
-                lineTouchData: LineTouchData(enabled: false),
-                gridData: FlGridData(show: false),
-                titlesData: FlTitlesData(show: false),
-                borderData: FlBorderData(show: false),
-                minX: 0,
-                maxX: weeks.length.toDouble() - 1,
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: wasteData
-                        .asMap()
-                        .entries
-                        .map((entry) => FlSpot(
-                              entry.key.toDouble(),
-                              entry.value['biodegradable'] ?? 0.0,
-                            ))
-                        .toList(),
-                    isCurved: true,
-                    color: Colors.green,
-                    barWidth: 3,
-                    belowBarData: BarAreaData(
-                      show: true,
-                      color: Colors.green.withOpacity(0.1),
-                    ),
-                  ),
-                  LineChartBarData(
-                    spots: wasteData
-                        .asMap()
-                        .entries
-                        .map((entry) => FlSpot(
-                              entry.key.toDouble(),
-                              entry.value['hazardous'] ?? 0.0,
-                            ))
-                        .toList(),
-                    isCurved: true,
+            SfCartesianChart(
+              plotAreaBorderWidth: 0,
+              margin: EdgeInsets.zero,
+              series: <ChartSeries>[
+                SplineAreaSeries<Map<String, dynamic>, String>(
+                  dataSource: widget.graphData,
+                  xValueMapper: (Map<String, dynamic> data, _) => data['week'],
+                  yValueMapper: (Map<String, dynamic> data, _) => data['total_weight'],
+                  color: Colors.transparent, // Make the area transparent to show the image
+                  splineType: SplineType.natural,
+                  borderColor: Colors.orange,
+                  borderWidth: 3,
+                ),
+                SplineSeries<Map<String, dynamic>, String>(
+                  dataSource: [widget.graphData[_sliderValue.toInt()]],
+                  xValueMapper: (Map<String, dynamic> data, _) => data['week'],
+                  yValueMapper: (Map<String, dynamic> data, _) => data['total_weight'],
+                  color: Colors.transparent,
+                  markerSettings: const MarkerSettings(
+                    isVisible: true,
                     color: Colors.orange,
-                    barWidth: 3,
-                    belowBarData: BarAreaData(
-                      show: true,
-                      color: Colors.orange.withOpacity(0.1),
-                    ),
+                    borderColor: Colors.orange,
+                    borderWidth: 4,
+                    width: 12,
+                    height: 12,
                   ),
-                  LineChartBarData(
-                    spots: wasteData
-                        .asMap()
-                        .entries
-                        .map((entry) => FlSpot(
-                              entry.key.toDouble(),
-                              entry.value['recyclable'] ?? 0.0,
-                            ))
-                        .toList(),
-                    isCurved: true,
-                    color: Colors.blue,
-                    barWidth: 3,
-                    belowBarData: BarAreaData(
-                      show: true,
-                      color: Colors.blue.withOpacity(0.1),
-                    ),
-                  ),
-                ],
-                backgroundColor: Colors.blueGrey.withOpacity(0.5),
+                ),
+              ],
+              primaryXAxis: CategoryAxis(
+                isVisible: false,
+                majorGridLines: const MajorGridLines(width: 0),
+                axisLine: const AxisLine(width: 0),
+              ),
+              primaryYAxis: NumericAxis(
+                isVisible: false,
+                majorGridLines: const MajorGridLines(width: 0),
+                axisLine: const AxisLine(width: 0),
               ),
             ),
             Positioned(
@@ -163,9 +140,9 @@ class _GraphWidgetState extends State<GraphWidget> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '${wasteData[_sliderValue.toInt()]['biodegradable']?.toStringAsFixed(1)} kg',
+                      '${totalWeights[_sliderValue.toInt()].toStringAsFixed(1)} kg',
                       style: const TextStyle(
-                        color: Colors.green,
+                        color: Colors.orange,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
                       ),

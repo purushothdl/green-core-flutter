@@ -48,6 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     await authProvider.fetchUserDetails(forceRefresh: true);
     await wasteProvider.fetchWasteStats(forceRefresh: true); // Force refresh
+    await wasteProvider.fetchWasteGraph(forceRefresh: true);
   }
 
   @override
@@ -69,17 +70,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
+                    SizedBox(
+                      height: 200, 
+                      child: GraphWidget(graphData: wasteProvider.graphData),
+                    ),
+                    const SizedBox(height: 16),
                     WasteStatsCard(
                       totalWeight: wasteProvider.totalWeight,
                       wasteByType: wasteProvider.wasteByType,
                     ),
                     const SizedBox(height: 16),
                     const ServicesWidget(),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      height: 200, // Set a fixed height for the graph
-                      child: GraphWidget(graphData: wasteProvider.graphData),
-                    ),
                   ],
                 ),
               ),
