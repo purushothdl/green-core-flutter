@@ -1,5 +1,5 @@
 class ApiEndpoints {
-  static const String baseUrl = "https://b9a0-117-213-150-55.ngrok-free.app";
+  static const String baseUrl = "https://ad0f-182-60-60-205.ngrok-free.app";
 
   // Auth Endpoints
   static const String register = "$baseUrl/api/users/register";
@@ -15,10 +15,13 @@ class ApiEndpoints {
   // Orgs Endpoints
   static const String getOrgs = "$baseUrl/api/orgs/";
 
+
   // Chat Endpoints
   static const String startChat = "$baseUrl/api/chats/start";
   static const String continueChat = "$baseUrl/api/chats/continue";
-  static const String endChat = "$baseUrl/api/chats/end/{session_id}";
+  static const String endChat = "$baseUrl/api/chats/end";
+  static const String getChats = "$baseUrl/api/chats/user";
+  static const String getChat = "$baseUrl/api/chats";
 
   // FAQs Endpoint
   static const String getFAQs = "$baseUrl/api/faqs/";

@@ -11,6 +11,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      
       backgroundColor: Colors.green,
       foregroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
@@ -19,6 +20,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
           bottomRight: Radius.circular(18), // Rounded bottom-right corner
         ),
       ),
+      automaticallyImplyLeading: false,
       title: Row(
         children: [
           // Profile Picture

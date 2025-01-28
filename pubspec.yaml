@@ -43,6 +43,9 @@ dependencies:
   syncfusion_flutter_charts: ^20.4.38
   geolocator: ^13.0.2
   google_maps_flutter: ^2.10.0
+  image_picker: ^1.1.2
+  google_fonts: ^6.2.1
+  file_picker: ^8.1.7
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +73,7 @@ flutter:
   assets:
     - assets/header/default_icon.jpg
     - assets/dashboard/
+    - assets/orgs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

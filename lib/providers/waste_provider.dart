@@ -17,6 +17,7 @@ class WasteProvider with ChangeNotifier {
   bool get isLoaded => _isLoaded;
   bool get isGraphLoading => _isGraphLoading;
 
+  // Fetch waste stats
   Future<void> fetchWasteStats({bool forceRefresh = false}) async {
     if (_isLoaded && !forceRefresh) return; // Skip if already loaded and not forcing refresh
 
@@ -38,20 +39,27 @@ class WasteProvider with ChangeNotifier {
     }
   }
 
-Future<void> fetchWasteGraph({bool forceRefresh = false}) async {
-  if (_graphData.isNotEmpty && !forceRefresh) return; // Skip if already loaded and not forcing refresh
+  // Fetch waste graph data
+  Future<void> fetchWasteGraph({bool forceRefresh = false}) async {
+    if (_graphData.isNotEmpty && !forceRefresh) return; // Skip if already loaded and not forcing refresh
 
-  _isGraphLoading = true;
-  notifyListeners();
-
-  try {
-    _graphData = await WasteService.fetchWasteGraph();
-    print('Fetched Graph Data: $_graphData'); // Log the fetched data
-  } catch (e) {
-    throw Exception('Failed to fetch waste graph: $e');
-  } finally {
-    _isGraphLoading = false;
+    _isGraphLoading = true;
     notifyListeners();
+
+    try {
+      _graphData = await WasteService.fetchWasteGraph();
+      print('Fetched Graph Data: $_graphData'); // Log the fetched data
+    } catch (e) {
+      throw Exception('Failed to fetch waste graph: $e');
+    } finally {
+      _isGraphLoading = false;
+      notifyListeners();
+    }
   }
-}
+
+  // Fetch both stats and graph data
+  Future<void> fetchAllData({bool forceRefresh = false}) async {
+    await fetchWasteStats(forceRefresh: forceRefresh);
+    await fetchWasteGraph(forceRefresh: forceRefresh);
+  }
 }

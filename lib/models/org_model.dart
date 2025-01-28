@@ -1,4 +1,5 @@
 // lib/models/org_model.dart
+
 class Org {
   final String id;
   final String name;
@@ -7,6 +8,7 @@ class Org {
   final String address;
   final String contact;
   final String? imageUrl;
+  final int? rating;
   final String createdAt;
 
   Org({
@@ -17,6 +19,7 @@ class Org {
     required this.address,
     required this.contact,
     this.imageUrl,
+    this.rating,
     required this.createdAt,
   });
 
@@ -29,6 +32,7 @@ class Org {
       address: json['address'],
       contact: json['contact'],
       imageUrl: json['image_url'],
+      rating: json['rating'],
       createdAt: json['created_at'],
     );
   }

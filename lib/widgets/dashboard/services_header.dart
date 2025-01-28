@@ -14,32 +14,52 @@ class _ServicesWidgetState extends State<ServicesWidget>
   late AnimationController _controller;
   late List<Animation<double>> _animations;
 
+  final List<Map<String, dynamic>> _services = [
+    {
+      'icon': Icons.delete_outline_rounded,
+      'label': 'Dispose',
+      'color': const Color(0xFF00C853),
+    },
+    {
+      'icon': Icons.smart_toy_outlined,
+      'label': 'Chatbot',
+      'color': const Color(0xFF2962FF),
+    },
+    {
+      'icon': Icons.history_rounded,
+      'label': 'History',
+      'color': const Color(0xFFF57F17),
+    },
+    {
+      'icon': Icons.help_outline_rounded,
+      'label': 'FAQs',
+      'color': const Color(0xFFAA00FF),
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
 
-    // Initialize the animation controller
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1000),
     );
 
-    // Create staggered animations for each button
     _animations = List.generate(
       4,
       (index) => Tween<double>(begin: 0, end: 1).animate(
         CurvedAnimation(
           parent: _controller,
           curve: Interval(
-            index * 0.2, // Staggered delay for each button
+            index * 0.15,
             1.0,
-            curve: Curves.easeOut,
+            curve: Curves.fastEaseInToSlowEaseOut,
           ),
         ),
       ),
     );
 
-    // Start the animation
     _controller.forward();
   }
 
@@ -52,60 +72,75 @@ class _ServicesWidgetState extends State<ServicesWidget>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 8.0, bottom: 16.0),
-            child: Text(
-              'Services',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: Colors.green,
-                letterSpacing: -0.5,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 16.0),
+            child: RichText(
+              text: TextSpan(
+                text: 'Services',
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey.shade800,
+                  letterSpacing: -0.8,
+                  height: 1.2,
+                ),
+                children: [
+                  TextSpan(
+                    text: '\nQuick access to features',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey.shade500,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _AnimatedServiceButton(
-                animation: _animations[0],
-                icon: Icons.delete_outline_rounded,
-                label: 'Dispose',
-                color: Colors.green,
-                onTap: () {},
+          SizedBox(
+            height: 130,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(
+                4,
+                (index) => _AnimatedServiceButton(
+                  animation: _animations[index],
+                  icon: _services[index]['icon'] as IconData,
+                  label: _services[index]['label'] as String,
+                  color: _services[index]['color'] as Color,
+                  onTap: () => _handleServiceTap(index, context),
+                ),
               ),
-              _AnimatedServiceButton(
-                animation: _animations[1],
-                icon: Icons.radio_button_checked_outlined,
-                label: 'Chatbot',
-                color: Colors.blue,
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, '/chatbot');
-                },
-              ),
-              _AnimatedServiceButton(
-                animation: _animations[2],
-                icon: Icons.history_rounded,
-                label: 'History',
-                color: Colors.orange,
-                onTap: () {},
-              ),
-              _AnimatedServiceButton(
-                animation: _animations[3],
-                icon: Icons.help_outline_rounded,
-                label: 'FAQs',
-                color: Colors.purple,
-                onTap: () {},
-              ),
-            ],
+            ),
           ),
         ],
       ),
     );
+  }
+
+  void _handleServiceTap(int index, BuildContext context) async {
+    // Wait for 500ms before navigation
+    await Future.delayed(const Duration(milliseconds: 200));
+    
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/dispose');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/chatbot');
+        break;
+      case 2:
+        // Handle history tap
+        break;
+      case 3:
+        // Handle FAQs tap
+        break;
+    }
   }
 }
 
@@ -136,49 +171,67 @@ class _AnimatedServiceButtonState extends State<_AnimatedServiceButton> {
     return AnimatedBuilder(
       animation: widget.animation,
       builder: (context, child) {
-        return Opacity(
-          opacity: widget.animation.value,
-          child: Transform.translate(
-            offset: Offset(0, (1 - widget.animation.value) * 20),
+        return Transform(
+          transform: Matrix4.identity()
+            ..translate(
+              0.0,
+              (1 - widget.animation.value) * 20,
+            )
+            ..scale(widget.animation.value),
+          alignment: Alignment.center,
+          child: Opacity(
+            opacity: widget.animation.value,
             child: child,
           ),
         );
       },
-      child: InkWell(
-        borderRadius: BorderRadius.circular(40),
-        highlightColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        onTap: () {
-          setState(() {
-            _isTapped = !_isTapped; // Toggle state on tap
-          });
-          widget.onTap();
-        },
-        child: Column(
-          children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: _isTapped ? widget.color : widget.color.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                widget.icon,
-                size: 32,
-                color: _isTapped ? Colors.white : widget.color,
-              ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(40),
+          onTap: () {
+            setState(() {
+              _isTapped = true;
+            });
+            Future.delayed(const Duration(milliseconds: 300), () {
+              widget.onTap();
+            });
+          },
+          splashColor: widget.color.withOpacity(0.2),
+          highlightColor: widget.color.withOpacity(0.1),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: 80,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: _isTapped ? widget.color : widget.color.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    widget.icon,
+                    size: 28,
+                    color: _isTapped ? Colors.white : widget.color,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  widget.label,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade700,
+                    letterSpacing: -0.2,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              widget.label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey.shade700,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

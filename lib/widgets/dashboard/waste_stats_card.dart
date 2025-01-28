@@ -22,38 +22,38 @@ class WasteStatsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.green.shade600.withOpacity(0.1),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 1,
-            offset: const Offset(0, 1),
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(24),
         child: Stack(
           children: [
-            // Gradient Background
-            Positioned.fill(
+            // Decorative accent
+            Positioned(
+              top: -30,
+              right: -30,
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: Colors.green.shade50,
+                  shape: BoxShape.circle,
                 ),
               ),
             ),
             
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _buildHeader(),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   _buildWasteTypeGrid(),
                 ],
               ),
@@ -61,7 +61,11 @@ class WasteStatsCard extends StatelessWidget {
           ],
         ),
       ),
-    ).animate().fadeIn(duration: 500.ms).slideY(begin: 0.1, end: 0);
+    ).animate().fadeIn(duration: 500.ms).slideY(
+          begin: 0.1,
+          end: 0,
+          curve: Curves.easeOutCubic,
+        );
   }
 
   Widget _buildHeader() {
@@ -71,13 +75,13 @@ class WasteStatsCard extends StatelessWidget {
         Row(
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: 48,
+              height: 48,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.green.shade600.withOpacity(0.8),
                     Colors.green.shade700,
+                    Colors.green.shade600,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -85,56 +89,58 @@ class WasteStatsCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.green.shade600.withOpacity(0.3),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    color: Colors.green.shade600.withOpacity(0.2),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
               child: const Icon(
-                Icons.delete_sweep_rounded,
+                Icons.eco_rounded,
                 size: 28,
                 color: Colors.white,
               ),
             ),
             const SizedBox(width: 16),
-            Text(
-              'WASTE DISPOSED',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: Colors.grey.shade800,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Total Waste Disposed',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey.shade600,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${NumberUtils.convertDouble(totalWeight)} kg',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.green.shade800,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(
-              color: Colors.green.shade100,
-              width: 1.5,
-            ),
-          ),
-          child: Text(
-            '${NumberUtils.convertDouble(totalWeight).toString()} kg',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              color: Colors.green.shade800,
-              letterSpacing: 0.5,
-            ),
-          ),
+        Icon(
+          Icons.trending_down_rounded,
+          color: Colors.green.shade600,
+          size: 32,
         ),
       ],
     );
   }
 
   Widget _buildWasteTypeGrid() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Wrap(
+      spacing: 24,
+      runSpacing: 24,
       children: wasteByType.entries.map((entry) {
         final (color, icon) = _getCategoryStyle(entry.key);
         return _buildWasteTypeItem(
@@ -142,7 +148,11 @@ class WasteStatsCard extends StatelessWidget {
           color: color,
           title: entry.key,
           value: entry.value,
-        );
+        ).animate().fadeIn(delay: 100.ms).slideX(
+              begin: 0.1,
+              end: 0,
+              duration: 300.ms,
+            );
       }).toList(),
     );
   }
@@ -153,69 +163,66 @@ class WasteStatsCard extends StatelessWidget {
     required String title,
     required double value,
   }) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: color.withOpacity(0.3),
-              width: 1,
+    return SizedBox(
+      width: 100,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  color.withOpacity(0.1),
+                  color.withOpacity(0.05),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: color.withOpacity(0.15),
+                width: 1,
+              ),
+            ),
+            child: Icon(icon, size: 24, color: color),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            title.toUpperCase(),
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: Colors.grey.shade600,
+              letterSpacing: 1.2,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '${NumberUtils.convertDouble(value)} kg',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w800,
+              color: color,
+              letterSpacing: -0.5,
             ),
           ),
-          child: Icon(icon, size: 16, color: color),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          title.toUpperCase(),
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w700,
-            color: Colors.grey.shade700,
-            letterSpacing: 1,
-          ),
-        ),
-        const SizedBox(height: 6),
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: NumberUtils.convertDouble(value).toString(),
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900,
-                  color: color,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              TextSpan(
-                text: ' kg',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: color,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   (Color, IconData) _getCategoryStyle(String category) {
     switch (category.toLowerCase()) {
       case 'recyclable':
-        return (Colors.blue.shade700, Icons.recycling_rounded);
+        return (Color(0xFF2D9CDB), Icons.recycling_rounded);
       case 'biodegradable':
-        return (Colors.teal.shade600, Icons.compost_rounded);
+        return (Color(0xFF27AE60), Icons.compost_rounded);
       case 'hazardous':
-        return (Colors.orange.shade700, Icons.warning_rounded);
+        return (Color(0xFFEB5757), Icons.dangerous_rounded);
       default:
-        return (Colors.grey.shade600, Icons.category_rounded);
+        return (Color(0xFF828282), Icons.inventory_2_rounded);
     }
   }
 }

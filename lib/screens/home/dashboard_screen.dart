@@ -1,13 +1,13 @@
 // lib/screens/home/dashboard_screen.dart
 import 'package:flutter/material.dart';
-import 'package:green_core/widgets/dashboard/graph_widget.dart';
-import 'package:green_core/widgets/dashboard/services_header.dart';
-import 'package:green_core/widgets/shared/loading_widget.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/waste_provider.dart';
 import '../../widgets/dashboard/dashboard_header.dart';
+import '../../widgets/dashboard/graph_widget.dart';
+import '../../widgets/dashboard/services_header.dart';
 import '../../widgets/dashboard/waste_stats_card.dart';
+import '../../widgets/shared/loading_widget.dart';
 import '../../widgets/shared/refresh_indicator.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -34,21 +34,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
     }
 
-    if (!wasteProvider.isLoaded) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await wasteProvider.fetchWasteStats();
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await wasteProvider.fetchAllData(); // Fetch both stats and graph data
+    });
   }
 
   Future<void> _handleRefresh() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final wasteProvider = Provider.of<WasteProvider>(context, listen: false);
 
-
     await authProvider.fetchUserDetails(forceRefresh: true);
-    await wasteProvider.fetchWasteStats(forceRefresh: true); // Force refresh
-    await wasteProvider.fetchWasteGraph(forceRefresh: true);
+    await wasteProvider.fetchAllData(forceRefresh: true); // Force refresh
   }
 
   @override
@@ -61,7 +57,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ? null // Hide app bar while loading
           : DashboardAppBar(user: authProvider.user),
       backgroundColor: Colors.white,
-      body: authProvider.user == null || wasteProvider.isLoading
+      body: authProvider.user == null || wasteProvider.isLoading || wasteProvider.isGraphLoading
           ? const Center(child: LoadingWidget())
           : CustomRefreshIndicator(
               onRefresh: _handleRefresh,
@@ -71,16 +67,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     const SizedBox(height: 10),
                     SizedBox(
-                      height: 200, 
+                      height: 210,
                       child: GraphWidget(graphData: wasteProvider.graphData),
                     ),
-                    const SizedBox(height: 16),
+
+                    const SizedBox(height: 12),
+                    const ServicesWidget(),
+
+                    const SizedBox(height: 8),
                     WasteStatsCard(
                       totalWeight: wasteProvider.totalWeight,
                       wasteByType: wasteProvider.wasteByType,
                     ),
-                    const SizedBox(height: 16),
-                    const ServicesWidget(),
                   ],
                 ),
               ),
