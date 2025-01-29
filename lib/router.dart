@@ -1,9 +1,11 @@
 // lib/router.dart
 import 'package:flutter/material.dart';
 import 'package:green_core/screens/chat/chat_screen.dart';
+import 'package:green_core/screens/faqs%20and%20team/faq_screen.dart';
 import 'package:green_core/screens/home/chatbot_screen.dart';
 import 'package:green_core/screens/home/home_screen.dart';
 import 'package:green_core/screens/home/profile_screen.dart';
+import 'package:green_core/screens/profie/edit_profile_screen.dart';
 import 'screens/auth/loading_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
@@ -31,6 +33,10 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case '/dispose':
         return MaterialPageRoute(builder: (_) => const OrgsScreen()); 
+      case '/faqs':
+        return MaterialPageRoute(builder: (_) => const FAQScreen()); 
+      case '/edit_profile':
+        return MaterialPageRoute(builder: (_) => const EditProfileScreen()); 
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

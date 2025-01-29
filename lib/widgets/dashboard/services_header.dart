@@ -138,7 +138,7 @@ class _ServicesWidgetState extends State<ServicesWidget>
         // Handle history tap
         break;
       case 3:
-        // Handle FAQs tap
+        Navigator.pushReplacementNamed(context, '/faqs');        
         break;
     }
   }

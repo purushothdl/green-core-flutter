@@ -1,17 +1,13 @@
 // lib/screens/chat_history_screen.dart
-// lib/features/chat/screens/chat_history_screen.dart
 import 'package:flutter/material.dart';
 import 'package:green_core/widgets/shared/refresh_indicator.dart';
 import 'package:provider/provider.dart';
-
 import '../../providers/auth_provider.dart';
 import '../../providers/chat_provider.dart';
 import '../../widgets/chat/chat_history_list.dart';
 import '../../widgets/chat/empty_chat_history.dart';
+import '../../widgets/shared/loading_widget.dart';
 import '../chat/chat_screen.dart';
-
-import 'package:flutter/scheduler.dart';
-
 import 'home_screen.dart';
 
 class ChatHistoryScreen extends StatefulWidget {
@@ -45,12 +41,7 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> with RouteAware {
   @override
   void initState() {
     super.initState();
-    final chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    if (!chatProvider.isInitialized) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        _loadChats(context);
-      });
-    }
+    _loadChats(context);
   }
 
   Future<void> _loadChats(BuildContext context) async {
@@ -64,14 +55,6 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    final userId = authProvider.user?.id;
-    if (!chatProvider.isInitialized && userId != null) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        chatProvider.loadUserChats(userId);
-      });
-    }
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -111,8 +94,8 @@ class _ChatHistoryScreenState extends State<ChatHistoryScreen> with RouteAware {
         onRefresh: () => _loadChats(context),
         child: Consumer<ChatProvider>(
           builder: (context, chatProvider, _) {
-            if (!chatProvider.isInitialized && chatProvider.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+            if (chatProvider.isLoading) {
+              return const Center(child: LoadingWidget());
             }
             if (chatProvider.error != null) {
               return Center(

@@ -1,10 +1,11 @@
 class ApiEndpoints {
-  static const String baseUrl = "https://ad0f-182-60-60-205.ngrok-free.app";
+  static const String baseUrl = "https://8baf-117-192-58-10.ngrok-free.app";
 
   // Auth Endpoints
   static const String register = "$baseUrl/api/users/register";
   static const String login = "$baseUrl/api/users/login";
   static const String me = "$baseUrl/api/users/me";
+  static const String updateProfile = "$baseUrl/api/users/upload-profile-image";
 
   // Waste Endpoints
   static const String disposeWaste = "$baseUrl/api/waste/dispose";

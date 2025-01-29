@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:green_core/providers/chat_provider.dart';
 import 'package:green_core/providers/dispose_provider.dart';
+import 'package:green_core/providers/faq_provider.dart';
 import 'package:green_core/providers/org_provider.dart';
+import 'package:green_core/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/waste_provider.dart';
@@ -19,6 +21,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => OrgProvider()),
         ChangeNotifierProvider(create: (_) => DisposeProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),
+        ChangeNotifierProvider(create: (_) => FAQProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
         Provider<RouteObserver<ModalRoute<void>>>(create: (_) => routeObserver),
       ],
       child: MaterialApp(

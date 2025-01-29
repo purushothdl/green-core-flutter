@@ -2,12 +2,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
-        android:label="green_core"
+        android:label="GreenCore"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBr760ZbRkS10sccAbQ_F98Ac4aMxZ9ZXw" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

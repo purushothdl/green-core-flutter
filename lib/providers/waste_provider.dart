@@ -62,4 +62,14 @@ class WasteProvider with ChangeNotifier {
     await fetchWasteStats(forceRefresh: forceRefresh);
     await fetchWasteGraph(forceRefresh: forceRefresh);
   }
+
+  void clearData() {
+    _totalWeight = 0;
+    _wasteByType = {};
+    _graphData = [];
+    _isLoading = false;
+    _isGraphLoading = false;
+    notifyListeners();
+  }
+
 }

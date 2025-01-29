@@ -1,5 +1,6 @@
 // lib/screens/home/dashboard_screen.dart
 import 'package:flutter/material.dart';
+import 'package:green_core/providers/chat_provider.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/waste_provider.dart';
@@ -27,10 +28,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _loadInitialData() {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final wasteProvider = Provider.of<WasteProvider>(context, listen: false);
+    final chatProvider = Provider.of<ChatProvider>(context, listen: false); 
 
     if (!authProvider.isUserLoaded) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await authProvider.fetchUserDetails();
+        await chatProvider.loadUserChats((authProvider.user?.id).toString());
       });
     }
 

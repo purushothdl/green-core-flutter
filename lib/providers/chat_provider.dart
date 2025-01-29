@@ -15,23 +15,21 @@ class ChatProvider with ChangeNotifier {
   List<ChatSession> get userChats => _userChats;
   bool get isInitialized => _isInitialized;
 
-  Future<void> loadUserChats(String userId, {bool forceReload = false}) async {
-    if (isLoading || (_isInitialized && !forceReload)) return;
-    isLoading = true;
-    error = null;
-    _safeNotifyListeners();
-    try {
-      final chats = await _chatService.getUserChats(userId);
-      _userChats = chats;
+    Future<void> loadUserChats(String userId, {bool forceReload = false}) async {
+      if (_isInitialized && !forceReload) return;
+      isLoading = true;
       _isInitialized = true;
-    } catch (e) {
-      error = e.toString();
-    } finally {
-      isLoading = false;
-      _safeNotifyListeners();
+      error = null;
+      notifyListeners();
+      try {
+        _userChats = await _chatService.getUserChats(userId);
+      } catch (e) {
+        error = e.toString();
+      } finally {
+        isLoading = false;
+        notifyListeners();
+      }
     }
-  }
-
   Future<void> loadChatSession(String sessionId) async {
     if (isLoading) return;
     isLoading = true;

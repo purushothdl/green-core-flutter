@@ -61,4 +61,11 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void clearUser() {
+    _user = null;
+    _isUserLoaded = false;
+    notifyListeners();
+  }
+
 }
