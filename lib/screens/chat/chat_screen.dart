@@ -77,7 +77,7 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Consumer<ChatProvider>(
         builder: (context, chatProvider, _) {
           if (chatProvider.isLoading) {
-            return const LoadingWidget(); // Show LoadingWidget while loading
+            return const LinearProgressIndicator(color: Colors.green,); // Show LoadingWidget while loading
           }
           if (chatProvider.error != null) {
             return Center(

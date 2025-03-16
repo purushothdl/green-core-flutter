@@ -145,20 +145,19 @@ class OrgCard extends StatelessWidget {
                       ),
 
                       const SizedBox(width: 12),
-_buildActionButton(
-  label: 'Give Rating',
-  color: Colors.blue.shade600,
-  onPressed: () {
-    // Trigger the rating popup
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return RatingWidget(orgId: org.id);  // Pass the org.id to the rating dialog
-      },
-    );
-  },
-),
-
+                      _buildActionButton(
+                        label: 'Give Rating',
+                        color: Colors.blue.shade600,
+                        onPressed: () {
+                          // Trigger the rating popup
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return RatingWidget(orgId: org.id);  // Pass the org.id to the rating dialog
+                            },
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ],

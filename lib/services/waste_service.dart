@@ -41,4 +41,20 @@ class WasteService {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> fetchWasteHistory() async {
+    final token = await TokenStorage.getToken();
+    if (token == null) throw Exception('No token found');
+
+    final url = Uri.parse(ApiEndpoints.wasteHistory);
+    final response = await http.get(
+      url,
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      return List<Map<String, dynamic>>.from(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to fetch waste history: ${response.statusCode}');
+    }
+  }
 }

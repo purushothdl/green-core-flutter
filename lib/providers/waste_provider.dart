@@ -9,6 +9,9 @@ class WasteProvider with ChangeNotifier {
   bool _isLoading = false;
   bool _isLoaded = false;
   bool _isGraphLoading = false;
+  List<Map<String, dynamic>> _history = [];
+  bool _isHistoryLoading = false;
+  bool _isHistoryLoaded = false;
 
   double get totalWeight => _totalWeight;
   Map<String, double> get wasteByType => _wasteByType;
@@ -16,6 +19,9 @@ class WasteProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get isLoaded => _isLoaded;
   bool get isGraphLoading => _isGraphLoading;
+  List<Map<String, dynamic>> get history => _history;
+  bool get isHistoryLoading => _isHistoryLoading;
+  bool get isHistoryLoaded => _isHistoryLoaded;
 
   // Fetch waste stats
   Future<void> fetchWasteStats({bool forceRefresh = false}) async {
@@ -72,4 +78,26 @@ class WasteProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> fetchWasteHistory({bool forceRefresh = false}) async {
+    if (_isHistoryLoaded && !forceRefresh) return;
+
+    _isHistoryLoading = true;
+    notifyListeners();
+
+    try {
+      _history = await WasteService.fetchWasteHistory();
+      _isHistoryLoaded = true;
+    } catch (e) {
+      throw Exception('Failed to fetch waste history: $e');
+    } finally {
+      _isHistoryLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void clearHistory() {
+    _history = [];
+    _isHistoryLoaded = false;
+    notifyListeners();
+  }
 }

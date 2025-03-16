@@ -2,7 +2,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'file_upload_widget.dart';
 import 'waste_type_selector.dart';
 
@@ -67,10 +66,7 @@ class _DisposeFormState extends State<DisposeForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Waste Type Selector
-            Text(
-              'Waste Type',
-              style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.orange),
-            ),
+            _buildHeader('Waste Type', 'Select the type of waste'),
             WasteTypeSelector(
               value: _selectedWasteType ?? 'Select Waste Type',
               onChanged: (value) => setState(() => _selectedWasteType = value),
@@ -82,10 +78,7 @@ class _DisposeFormState extends State<DisposeForm> {
 
             const SizedBox(height: 16),
             // File Upload
-            Text(
-              'Image Upload',
-              style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.orange),
-            ),
+            _buildHeader('Image Upload', 'Upload an image of the waste'),
             const SizedBox(height: 8),
             FileUploadWidget(
               label: 'Image',
@@ -136,10 +129,7 @@ class _DisposeFormState extends State<DisposeForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Weight (kg)',
-          style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.orange),
-        ),
+        _buildHeader('Weight (kg)', 'Enter the weight of the waste'),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
@@ -186,6 +176,34 @@ class _DisposeFormState extends State<DisposeForm> {
         side: BorderSide(color: backgroundColor),
       ),
       backgroundColor: textColor == Colors.white ? backgroundColor : Colors.white,
+    );
+  }
+
+  Widget _buildHeader(String title, String subtitle) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            text: title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey.shade800,
+              letterSpacing: -0.5,
+              height: 1.2,
+            ),
+          ),
+        ),
+        const SizedBox(height: 5,),
+        Text(
+          subtitle,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey.shade500,
+          ),
+        ),
+      ],
     );
   }
 }

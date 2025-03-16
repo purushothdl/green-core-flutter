@@ -47,7 +47,7 @@ class WasteStatsCard extends StatelessWidget {
             ),
             
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -137,26 +137,24 @@ class WasteStatsCard extends StatelessWidget {
     );
   }
 
-  Widget _buildWasteTypeGrid() {
-    return Wrap(
-      spacing: 24,
-      runSpacing: 24,
-      children: wasteByType.entries.map((entry) {
-        final (color, icon) = _getCategoryStyle(entry.key);
-        return _buildWasteTypeItem(
-          icon: icon,
-          color: color,
-          title: entry.key,
-          value: entry.value,
-        ).animate().fadeIn(delay: 100.ms).slideX(
-              begin: 0.1,
-              end: 0,
-              duration: 300.ms,
-            );
-      }).toList(),
-    );
-  }
-
+Widget _buildWasteTypeGrid() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: wasteByType.entries.map((entry) {
+      final (color, icon) = _getCategoryStyle(entry.key);
+      return _buildWasteTypeItem(
+        icon: icon,
+        color: color,
+        title: entry.key,
+        value: entry.value,
+      ).animate().fadeIn(delay: 100.ms).slideX(
+            begin: 0.1,
+            end: 0,
+            duration: 300.ms,
+          );
+    }).toList(),
+  );
+}
   Widget _buildWasteTypeItem({
     required IconData icon,
     required Color color,
@@ -179,7 +177,7 @@ class WasteStatsCard extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: color.withOpacity(0.15),
                 width: 1,
@@ -189,12 +187,12 @@ class WasteStatsCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            title.toUpperCase(),
+            title,
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
               color: Colors.grey.shade600,
-              letterSpacing: 1.2,
+              letterSpacing: 0.8,
             ),
             textAlign: TextAlign.center,
           ),
@@ -216,13 +214,13 @@ class WasteStatsCard extends StatelessWidget {
   (Color, IconData) _getCategoryStyle(String category) {
     switch (category.toLowerCase()) {
       case 'recyclable':
-        return (Color(0xFF2D9CDB), Icons.recycling_rounded);
+        return (const Color(0xFF2D9CDB), Icons.recycling_rounded);
       case 'biodegradable':
-        return (Color(0xFF27AE60), Icons.compost_rounded);
+        return (const Color(0xFF27AE60), Icons.compost_rounded);
       case 'hazardous':
-        return (Color(0xFFEB5757), Icons.dangerous_rounded);
+        return (const Color(0xFFEB5757), Icons.dangerous_rounded);
       default:
-        return (Color(0xFF828282), Icons.inventory_2_rounded);
+        return (const Color(0xFF828282), Icons.inventory_2_rounded);
     }
   }
 }

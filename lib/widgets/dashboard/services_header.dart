@@ -124,7 +124,6 @@ class _ServicesWidgetState extends State<ServicesWidget>
   }
 
   void _handleServiceTap(int index, BuildContext context) async {
-    // Wait for 500ms before navigation
     await Future.delayed(const Duration(milliseconds: 200));
     
     switch (index) {
@@ -135,10 +134,10 @@ class _ServicesWidgetState extends State<ServicesWidget>
         Navigator.pushReplacementNamed(context, '/chatbot');
         break;
       case 2:
-        // Handle history tap
+        Navigator.pushReplacementNamed(context, '/history');
         break;
       case 3:
-        Navigator.pushReplacementNamed(context, '/faqs');        
+        Navigator.pushReplacementNamed(context, '/faqs');
         break;
     }
   }
@@ -201,7 +200,7 @@ class _AnimatedServiceButtonState extends State<_AnimatedServiceButton> {
           highlightColor: widget.color.withOpacity(0.1),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            width: 80,
+            width: 85,
             padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -22,63 +22,61 @@ class _OrgsScreenState extends State<OrgsScreen> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final orgProvider = Provider.of<OrgProvider>(context);
+@override
+Widget build(BuildContext context) {
+  final orgProvider = Provider.of<OrgProvider>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Organisations',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text(
+        'Organisations',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
         ),
-        centerTitle: true, 
-        foregroundColor: Colors.white, 
-        backgroundColor: Colors.green, 
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+      ),
+      centerTitle: true,
+      foregroundColor: Colors.white,
+      backgroundColor: Colors.green,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, '/home');
+        },
+      ),
+      actions: [
+        // Refresh Button
+        IconButton(
+          icon: const Icon(Icons.refresh),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/home'); 
+            Provider.of<OrgProvider>(context, listen: false).refresh();
           },
         ),
-        actions: [
-          // Refresh Button
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: ()  {
-              Provider.of<OrgProvider>(context, listen: false).refresh();
-            },
-          ),
-        ],
-      ),
-      backgroundColor: Colors.white,
-      body: orgProvider.isLoading
-          ? const Center(child: LoadingWidget())
-          : RefreshIndicator(
-              onRefresh: () => orgProvider.refresh(),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // Map Widget
-                    const OrgsMap(),
+      ],
+    ),
+    backgroundColor: Colors.white,
+    body: orgProvider.isLoading
+        ? const Center(child: LoadingWidget())
+        : Column(
+            children: [
+              // Map Widget (Not Scrollable)
+              const OrgsMap(),
 
-                    // Orgs List
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: orgProvider.orgs.length,
-                      itemBuilder: (context, index) {
-                        final org = orgProvider.orgs[index];
-                        return OrgCard(org: org);
-                       
-                      },
-                    ),
-                  ],
+              // Scrollable Orgs List
+              Expanded(
+                child: SingleChildScrollView(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: orgProvider.orgs.length,
+                    itemBuilder: (context, index) {
+                      final org = orgProvider.orgs[index];
+                      return OrgCard(org: org);
+                    },
+                  ),
                 ),
               ),
-            ),
-    );
-  }
+            ],
+          ),
+  );
+}
 }

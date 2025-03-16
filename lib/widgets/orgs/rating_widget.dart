@@ -147,39 +147,42 @@ class _RatingWidgetState extends State<RatingWidget> {
 
   // Emoji Rating
   Widget _buildEmojiRating() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(5, (index) {
-        final isSelected = (index + 1) == _currentRating;
-        final bgColor = _getBackgroundColor(index);
-        
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              _currentRating = index + 1.0;
-            });
-          },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: isSelected ? bgColor.withOpacity(0.2) : Colors.transparent,
-              shape: BoxShape.circle,
-            ),
-            child: AnimatedScale(
-              scale: isSelected ? 1.3 : 1.0,
+    return Container(
+      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(5, (index) {
+          final isSelected = (index + 1) == _currentRating;
+          final bgColor = _getBackgroundColor(index);
+          
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _currentRating = index + 1.0;
+              });
+            },
+            child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              child: Text(
-                _getEmoji(index),
-                style: TextStyle(
-                  fontSize: 32,
-                  color: isSelected ? _getEmojiColor(index) : Colors.grey,
+              padding: const EdgeInsets.all(8), // Reduced padding
+              decoration: BoxDecoration(
+                color: isSelected ? bgColor.withOpacity(0.2) : Colors.transparent,
+                shape: BoxShape.circle,
+              ),
+              child: AnimatedScale(
+                scale: isSelected ? 1.2 : 1.0, // Slightly reduced scale
+                duration: const Duration(milliseconds: 200),
+                child: Text(
+                  _getEmoji(index),
+                  style: TextStyle(
+                    fontSize: 18, // Reduced font size
+                    color: isSelected ? _getEmojiColor(index) : Colors.grey,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 
@@ -203,7 +206,7 @@ Widget _buildButton({
   required Color color,
   required Color? textColor,
   required VoidCallback onPressed,
-  EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 24), // Default padding
+  EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 6), // Default padding
 }) {
   // If no textColor is provided, set it to white and match the border color to the background color
   textColor ??= Colors.white;

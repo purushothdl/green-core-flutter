@@ -81,6 +81,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget _buildHeader(ThemeData theme) {
     return Column(
       children: [
+        const SizedBox(height: 20),
+        
         Image.asset('assets/logo/logo.png', height: 100),
         const SizedBox(height: 20),
         Text(

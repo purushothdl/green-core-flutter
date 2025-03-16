@@ -1,5 +1,5 @@
 class ApiEndpoints {
-  static const String baseUrl = "https://8baf-117-192-58-10.ngrok-free.app";
+  static const String baseUrl = "https://7fab-182-60-59-126.ngrok-free.app";
 
   // Auth Endpoints
   static const String register = "$baseUrl/api/users/register";

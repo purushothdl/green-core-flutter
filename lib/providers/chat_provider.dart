@@ -20,14 +20,12 @@ class ChatProvider with ChangeNotifier {
       isLoading = true;
       _isInitialized = true;
       error = null;
-      notifyListeners();
       try {
         _userChats = await _chatService.getUserChats(userId);
       } catch (e) {
         error = e.toString();
       } finally {
         isLoading = false;
-        notifyListeners();
       }
     }
   Future<void> loadChatSession(String sessionId) async {
